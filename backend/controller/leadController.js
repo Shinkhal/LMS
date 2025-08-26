@@ -1,7 +1,5 @@
 import Lead from "../models/Leads.js";
 
-// @desc Create new lead
-// @route POST /api/leads
 export const createLead = async (req, res) => {
   try {
     const lead = await Lead.create({
@@ -14,26 +12,19 @@ export const createLead = async (req, res) => {
   }
 };
 
-// @desc Get all leads (with pagination & filters later)
-// @route GET /api/leads
-// @desc Get all leads (with pagination & filters)
-// @route GET /api/leads
 export const getLeads = async (req, res) => {
   try {
     const { page = 1, limit = 20, ...filters } = req.query;
 
     const query = { user: req.user.id };
 
-    // 🔹 String filters (contains)
     if (filters.email) query.email = { $regex: filters.email, $options: "i" };
     if (filters.company) query.company = { $regex: filters.company, $options: "i" };
     if (filters.city) query.city = { $regex: filters.city, $options: "i" };
 
-    // 🔹 Enum filters (equals / in)
     if (filters.status) query.status = filters.status;
     if (filters.source) query.source = filters.source;
 
-    // 🔹 Number filters
     if (filters.score) query.score = Number(filters.score);
     if (filters.score_gt) query.score = { ...query.score, $gt: Number(filters.score_gt) };
     if (filters.score_lt) query.score = { ...query.score, $lt: Number(filters.score_lt) };
@@ -41,12 +32,10 @@ export const getLeads = async (req, res) => {
     if (filters.lead_value_gt) query.lead_value = { ...query.lead_value, $gt: Number(filters.lead_value_gt) };
     if (filters.lead_value_lt) query.lead_value = { ...query.lead_value, $lt: Number(filters.lead_value_lt) };
 
-    // 🔹 Boolean filter
     if (filters.is_qualified !== undefined) {
       query.is_qualified = filters.is_qualified === "true";
     }
 
-    // 🔹 Date filters
     if (filters.created_before || filters.created_after) {
       query.createdAt = {};
       if (filters.created_before) query.createdAt.$lte = new Date(filters.created_before);
@@ -58,7 +47,6 @@ export const getLeads = async (req, res) => {
       if (filters.last_activity_after) query.last_activity_at.$gte = new Date(filters.last_activity_after);
     }
 
-    // 🔹 Run query with pagination
     const leads = await Lead.find(query)
       .skip((page - 1) * limit)
       .limit(Number(limit));
@@ -77,9 +65,6 @@ export const getLeads = async (req, res) => {
   }
 };
 
-
-// @desc Get single lead
-// @route GET /api/leads/:id
 export const getLeadById = async (req, res) => {
   try {
     const lead = await Lead.findOne({
@@ -93,8 +78,6 @@ export const getLeadById = async (req, res) => {
   }
 };
 
-// @desc Update lead
-// @route PUT /api/leads/:id
 export const updateLead = async (req, res) => {
   try {
     const lead = await Lead.findOneAndUpdate(
@@ -109,8 +92,6 @@ export const updateLead = async (req, res) => {
   }
 };
 
-// @desc Delete lead
-// @route DELETE /api/leads/:id
 export const deleteLead = async (req, res) => {
   try {
     const lead = await Lead.findOneAndDelete({

@@ -10,7 +10,6 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Protect all lead routes (only logged-in users can access)
 router.post("/", protect, createLead);
 router.get("/", protect, getLeads);
 router.get("/:id", protect, getLeadById);

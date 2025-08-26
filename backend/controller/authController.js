@@ -2,8 +2,6 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
-// @desc Register a new user
-// @route POST /api/auth/register
 export const register = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
@@ -32,8 +30,6 @@ export const register = async (req, res) => {
   }
 };
 
-// @desc Login user
-// @route POST /api/auth/login
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -53,11 +49,12 @@ export const login = async (req, res) => {
     });
 
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    });
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production", 
+  sameSite: "none", 
+  maxAge: 24 * 60 * 60 * 1000,
+  });
+
 
     res.json({ message: "Login successful" });
   } catch (err) {
@@ -65,15 +62,11 @@ export const login = async (req, res) => {
   }
 };
 
-// @desc Logout user
-// @route POST /api/auth/logout
 export const logout = (req, res) => {
   res.clearCookie("token");
   res.json({ message: "Logged out successfully" });
 };
 
-// @desc Get current logged-in user
-// @route GET /api/auth/me
 export const getCurrentUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
@@ -84,8 +77,6 @@ export const getCurrentUser = async (req, res) => {
   }
 };
 
-// @desc Edit user profile
-// @route PUT /api/auth/edit
 export const editProfile = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
