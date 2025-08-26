@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { useAuth } from "../context/AuthContext"; // ✅ using AuthContext
+import { useAuth } from "../context/AuthContext"; 
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -27,7 +27,6 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Menu - Only if logged in */}
           {user && (
             <div className="hidden md:flex items-center space-x-1">
               <Link
@@ -65,7 +64,6 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Mobile Hamburger - Only if logged in */}
           {user && (
             <button
               className="md:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors duration-200"
@@ -76,7 +74,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Dropdown - Only if logged in */}
         {menuOpen && user && (
           <div className="md:hidden py-4 border-t border-gray-100 bg-white/95 backdrop-blur-sm">
             <div className="space-y-1">

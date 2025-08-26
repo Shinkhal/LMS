@@ -11,17 +11,18 @@ import EditLead from "./pages/LeadEdit";
 import Layout from "./components/Layout";
 import EditProfile from "./pages/EditProfile";
 
+import Loader from "./components/Loader";
+
 function App() {
   const { user, loading } = useAuth();
 
-  if (loading) return <div>Loading...</div>; // can replace with spinner
+  if (loading) return <Loader />;
 
   return (
     <Router>
       <Routes>
         <Route path="/login" element={!user ? <Login /> : <Navigate to="/leads" />} />
 
-        {/* If logged in -> show leads as home */}
         <Route
           path="/"
           element={
